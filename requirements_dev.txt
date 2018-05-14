@@ -1,0 +1,3 @@
+ocrd
+click
+git+https://github.com/mittagessen/kraken#egg=kraken

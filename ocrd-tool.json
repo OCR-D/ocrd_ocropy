@@ -9,6 +9,5 @@
       "parameters": {
         "level-of-operation": {"type": "string", "default": "page", "enum": ["page", "region", "line"]}
       }
-    }
   ]
 }
