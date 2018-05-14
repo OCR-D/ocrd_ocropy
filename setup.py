@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Installs one binary:
+Installs two binaries:
 
     - ocrd-kraken-binarize
+    - ocrd-kraken-segment
 """
 import codecs
 
