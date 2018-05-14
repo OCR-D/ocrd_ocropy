@@ -1,0 +1,14 @@
+{
+  "git_url": "https://github.com/OCR-D/ocrd_ocropy",
+  "tools": [
+    {
+      "executable": "ocrd-ocropy-segment",
+      "tags": ["Image preprocessing"],
+      "step": "preprocessing/optimization/binarization",
+      "description": "Segment page",
+      "parameters": {
+        "level-of-operation": {"type": "string", "default": "page", "enum": ["page", "region", "line"]}
+      }
+    }
+  ]
+}
