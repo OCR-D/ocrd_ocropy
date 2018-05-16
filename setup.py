@@ -23,7 +23,7 @@ setup(
     packages=find_packages(exclude=('tests', 'docs')),
     install_requires=[
         'ocrd >= 0.2.0',
-        'ocropy',
+        'ocrd-fork-ocropy >= v1.3.4-pre1',
         'click',
     ],
     entry_points={

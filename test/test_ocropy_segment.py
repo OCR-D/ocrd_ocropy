@@ -24,7 +24,8 @@ class TestOcropySegment(TestCase):
         proc = OcropySegment(
             workspace,
             input_file_grp="OCR-D-IMG-BIN",
-            output_file_grp="OCR-D-SEG-LINE-OCROPY",
+            output_file_grp="OCR-D-SEG-OCROPY",
+            group_id='P_0017',
             parameter={'level-of-operation': 'line'}
         )
         proc.process()

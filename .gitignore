@@ -106,3 +106,4 @@ ENV/
 .pytest_cache
 test/assets
 repo
+ocropy
