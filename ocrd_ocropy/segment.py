@@ -7,9 +7,16 @@ from __future__ import absolute_import
 # pylint: disable=multiple-statements
 
 from ocrd import Processor
-from ocrd.utils import getLogger, polygon_from_points, points_from_x0y0x1y1
+from ocrd.constants import MIMETYPE_PAGE
+from ocrd.utils import (
+    getLogger,
+    mets_file_id,
+    polygon_from_points,
+    points_from_x0y0x1y1
+)
+
 import ocrd.model.ocrd_page as ocrd_page
-from  ocrd.model.ocrd_page import TextRegionType, TextLineType, CoordsType, to_xml
+from ocrd.model.ocrd_page import TextRegionType, TextLineType, CoordsType, to_xml
 from ocrd_ocropy.config import OCRD_OCROPY_TOOL
 
 import logging
@@ -109,7 +116,7 @@ class OcropySegment(Processor):
     def compute_colseps_mconv(self, binary, scale=1.0):
         """Find column separators using a combination of morphological
         operations and convolution."""
-        h, w = binary.shape
+        #  h, w = binary.shape
         smoothed = gaussian_filter(1.0 * binary, (scale, scale * 0.5))
         smoothed = uniform_filter(smoothed, (5.0 * scale, 1))
         thresh = (smoothed < np.amax(smoothed) * 0.1)
@@ -124,7 +131,7 @@ class OcropySegment(Processor):
     def compute_colseps_conv(self, binary, scale=1.0):
         """Find column separators by convolution and
         thresholding."""
-        h, w = binary.shape
+        #  h, w = binary.shape
         # find vertical whitespace by thresholding
         smoothed = gaussian_filter(1.0 * binary, (scale, scale * 0.5))
         smoothed = uniform_filter(smoothed, (5.0 * scale, 1))
@@ -156,12 +163,12 @@ class OcropySegment(Processor):
 
 
     def remove_hlines(self, binary, scale, maxsize=10):
-        labels,_ = morph.label(binary)
+        labels, _ = morph.label(binary)
         objects = morph.find_objects(labels)
         for i, b in enumerate(objects):
             if sl.width(b) > maxsize * scale:
                 labels[b][labels[b] == i + 1] = 0
-        return np.array(labels!=0, 'B')
+        return np.array(labels != 0, 'B')
 
 
     def compute_segmentation(self, binary, scale):
@@ -215,7 +222,7 @@ class OcropySegment(Processor):
             log.info("pcgts %s", pcgts)
 
             binary = ocrolib.read_image_binary(self.workspace.download_url(image_url))
-            binary  = 1 -  binary
+            binary = 1 - binary
 
             scale = self.parameter['scale'] if self.parameter['scale'] != 0 else psegutils.estimate_scale(binary)
             log.debug(binary)
@@ -223,16 +230,33 @@ class OcropySegment(Processor):
             pseg = self.compute_segmentation(binary, scale)
             log.debug("pseg=%s", pseg)
 
-            log.debug("finding reading order")
-            lines = psegutils.compute_lines(pseg, scale)
-            order = psegutils.reading_order([l.bounds for l in lines])
-            lsort = psegutils.topsort(order)
+            # TODO reading order / enumber
+            #  log.debug("finding reading order")
+            #  lines = psegutils.compute_lines(pseg, scale)
+            #  order = psegutils.reading_order([l.bounds for l in lines])
+            #  lsort = psegutils.topsort(order)
 
             regions = ocrolib.RegionExtractor()
             regions.setPageLines(pseg)
-            log.debug('REGIONS')
-            for i in range(1, regions.length()):
-                log.debug("id=%s bbox=%s", regions.id(i), regions.bbox(i))
+
+            dummyRegion = TextRegionType()
+            pcgts.get_Page().add_TextRegion(dummyRegion)
+
+            for lineno in range(1, regions.length()):
+                log.debug("id=%s bbox=%s", regions.id(lineno), regions.bbox(lineno))
+                textline = TextLineType(
+                    id=mets_file_id("line", lineno),
+                    Coords=CoordsType(points=points_from_x0y0x1y1(regions.bbox(lineno)))
+                )
+                dummyRegion.add_TextLine(textline)
+            ID = mets_file_id(self.output_file_grp, n)
+            self.add_output_file(
+                ID=ID,
+                file_grp=self.output_file_grp,
+                basename="%s.xml" % ID,
+                mimetype=MIMETYPE_PAGE,
+                content=to_xml(pcgts)
+            )
 
             #  log.debug(pseg)
             #  for l in lines:
@@ -240,20 +264,6 @@ class OcropySegment(Processor):
             #  log.debug(order)
             #  log.debug(lsort)
 
-            #  # TODO parameters
-            #  text_direction = 'horizontal-lr'
-            #  script_detect = False
-            #  scale = None
-            #  maxcolseps = 2
-            #  black_colseps = False
-
-            #  log.info('Segmenting')
-            #  res = pageseg.segment(im, text_direction, scale, maxcolseps, black_colseps)
-            #  if script_detect:
-            #      res = pageseg.detect_scripts(im, res)
-
-            #  dummyRegion = TextRegionType()
-            #  pcgts.get_Page().add_TextRegion(dummyRegion)
             #  #  print(res)
             #  for lineno, box in enumerate(res['boxes']):
             #      textline = TextLineType(
@@ -261,11 +271,3 @@ class OcropySegment(Processor):
             #          Coords=CoordsType(points=points_from_x0y0x1y1(box))
             #      )
             #      dummyRegion.add_TextLine(textline)
-            #  ID = mets_file_id(self.output_file_grp, n)
-            #  self.add_output_file(
-            #      ID=ID,
-            #      file_grp=self.output_file_grp,
-            #      basename="%s.xml" % ID,
-            #      mimetype=MIMETYPE_PAGE,
-            #      content=to_xml(pcgts).encode('utf-8')
-            #  )

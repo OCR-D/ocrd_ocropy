@@ -7,7 +7,6 @@ from test.base import TestCase, assets, main
 
 from ocrd.resolver import Resolver
 from ocrd_ocropy.segment import OcropySegment
-from ocrd_ocropy.config import OCRD_OCROPY_TOOL
 
 PARAM_JSON = assets.url_of('param-segment.json')
 
@@ -29,8 +28,8 @@ class TestOcropySegment(TestCase):
             output_file_grp="OCR-D-SEG-OCROPY",
             group_id='P_0017',
         )
-        print(proc.parameter)
-        #  proc.process()
+        #  print(proc.parameter)
+        proc.process()
         workspace.save_mets()
 
 if __name__ == "__main__":
