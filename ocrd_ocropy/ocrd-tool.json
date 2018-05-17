@@ -1,0 +1,26 @@
+{
+  "git_url": "https://github.com/OCR-D/ocrd_ocropy",
+  "tools": [
+    {
+      "executable": "ocrd-ocropy-segment",
+      "tags": ["Image preprocessing"],
+      "step": "layout/segmentation/region",
+      "description": "Segment page",
+      "parameters": {
+        "maxcolseps":  {"type": "number", "default": 3},
+        "maxseps":     {"type": "number", "default": 0},
+        "sepwiden":    {"type": "number", "default": 10},
+        "csminheight": {"type": "number", "default": 10},
+        "csminaspect": {"type": "number", "default": 1.1},
+        "pad":         {"type": "number", "default": 3},
+        "expand":      {"type": "number", "default": 3},
+        "usegauss":    {"type": "boolean", "default": false},
+        "threshold":   {"type": "number", "default": 0.2},
+        "noise":       {"type": "number", "default": 8},
+        "scale":       {"type": "number", "default": 0.0},
+        "hscale":      {"type": "number", "default": 1.0},
+        "vscale":      {"type": "number", "default": 1.0}
+      }
+    }
+  ]
+}
