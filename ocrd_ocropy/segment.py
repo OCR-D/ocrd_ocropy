@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 
+# pylint: disable=import-error
 # pylint: disable=unused-import
 # pylint: disable=wrong-import-position
 # pylint: disable=wrong-import-order
@@ -9,6 +10,7 @@ from ocrd import Processor
 from ocrd.utils import getLogger, polygon_from_points, points_from_x0y0x1y1
 import ocrd.model.ocrd_page as ocrd_page
 from  ocrd.model.ocrd_page import TextRegionType, TextLineType, CoordsType, to_xml
+from ocrd_ocropy.config import OCRD_OCROPY_TOOL
 
 import logging
 logging.getLogger('matplotlib').setLevel(logging.INFO)
@@ -31,6 +33,11 @@ def find(condition):
 
 def norm_max(v):
     return v/np.amax(v)
+
+def B(a):
+    if a.dtype == np.dtype('B'):
+        return a
+    return np.array(a, 'B')
 
 
 class OcropySegment(Processor):
@@ -153,7 +160,7 @@ class OcropySegment(Processor):
         objects = morph.find_objects(labels)
         for i, b in enumerate(objects):
             if sl.width(b) > maxsize * scale:
-                labels[b][labels[b]==i+1] = 0
+                labels[b][labels[b] == i + 1] = 0
         return np.array(labels!=0, 'B')
 
 
@@ -189,25 +196,14 @@ class OcropySegment(Processor):
 # ----- >8 ------------------------------
 # End snippety snap
 
+    def __init__(self, *args, **kwargs):
+        kwargs['ocrd_tool'] = OCRD_OCROPY_TOOL['tools'][0]
+        super(OcropySegment, self).__init__(*args, **kwargs)
+
     def process(self):
         """
         Segment with ocropy
         """
-
-        if 'maxcolseps' not in self.parameter: self.parameter['maxcolseps'] = 3
-        if 'maxseps' not in self.parameter: self.parameter['maxseps'] = 0
-        if 'sepwiden' not in self.parameter: self.parameter['sepwiden'] = 10
-        if 'csminheight' not in self.parameter: self.parameter['csminheight'] = 10
-        if 'csminaspect' not in self.parameter: self.parameter['csminaspect'] = 1.1
-        if 'pad' not in self.parameter: self.parameter['pad'] = 3
-        if 'expand' not in self.parameter: self.parameter['expand'] = 3
-        if 'usegauss' not in self.parameter: self.parameter['usegauss'] = False
-        if 'threshold' not in self.parameter: self.parameter['threshold'] = 0.2
-        if 'expand' not in self.parameter: self.parameter['expand'] = 3
-        if 'noise' not in self.parameter: self.parameter['noise'] = 8
-        if 'scale' not in self.parameter: self.parameter['scale'] = 0.0
-        if 'hscale' not in self.parameter: self.parameter['hscale'] = 1.0
-        if 'vscale' not in self.parameter: self.parameter['vscale'] = 1.0
 
         for (n, input_file) in enumerate(self.input_files):
             log.info("INPUT FILE %i / %s", n, input_file)

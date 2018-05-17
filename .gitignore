@@ -107,3 +107,4 @@ ENV/
 test/assets
 repo
 ocropy
+.pynative
