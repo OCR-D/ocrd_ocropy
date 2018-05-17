@@ -17,7 +17,7 @@ from ocrd.utils import (
 
 import ocrd.model.ocrd_page as ocrd_page
 from ocrd.model.ocrd_page import TextRegionType, TextLineType, CoordsType, to_xml
-from ocrd_ocropy.config import OCRD_OCROPY_TOOL
+from ocrd_ocropy.config import OCRD_TOOL
 
 import logging
 logging.getLogger('matplotlib').setLevel(logging.INFO)
@@ -204,7 +204,7 @@ class OcropySegment(Processor):
 # End snippety snap
 
     def __init__(self, *args, **kwargs):
-        kwargs['ocrd_tool'] = OCRD_OCROPY_TOOL['tools'][0]
+        kwargs['ocrd_tool'] = OCRD_TOOL['tools'][0]
         super(OcropySegment, self).__init__(*args, **kwargs)
 
     def process(self):
