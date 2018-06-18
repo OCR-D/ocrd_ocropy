@@ -22,7 +22,7 @@ setup(
     license='Apache License 2.0',
     packages=find_packages(exclude=('tests', 'docs')),
     install_requires=[
-        'ocrd >= 0.2.3',
+        'ocrd >= 0.3.1',
         'ocrd-fork-ocropy >= v1.3.3.post2',
         'click',
     ],
@@ -31,7 +31,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'ocrd-ocropy-gpageseg=ocrd_ocropy.cli:ocrd_ocropy_gpageseg',
+            'ocrd-ocropy-segment=ocrd_ocropy.cli:ocrd_ocropy_segment',
         ]
     },
 )

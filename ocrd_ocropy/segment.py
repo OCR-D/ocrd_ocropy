@@ -10,7 +10,7 @@ from ocrd import Processor
 from ocrd.constants import MIMETYPE_PAGE
 from ocrd.utils import (
     getLogger,
-    mets_file_id,
+    concat_padded,
     polygon_from_points,
     points_from_x0y0x1y1
 )
@@ -204,7 +204,8 @@ class OcropySegment(Processor):
 # End snippety snap
 
     def __init__(self, *args, **kwargs):
-        kwargs['ocrd_tool'] = OCRD_TOOL['tools'][0]
+        kwargs['ocrd_tool'] = OCRD_TOOL['tools']['ocrd-ocropy-segment']
+        kwargs['version'] = OCRD_TOOL['version']
         super(OcropySegment, self).__init__(*args, **kwargs)
 
     def process(self):
@@ -245,11 +246,11 @@ class OcropySegment(Processor):
             for lineno in range(1, regions.length()):
                 log.debug("id=%s bbox=%s", regions.id(lineno), regions.bbox(lineno))
                 textline = TextLineType(
-                    id=mets_file_id("line", lineno),
+                    id=concat_padded("line", lineno),
                     Coords=CoordsType(points=points_from_x0y0x1y1(regions.bbox(lineno)))
                 )
                 dummyRegion.add_TextLine(textline)
-            ID = mets_file_id(self.output_file_grp, n)
+            ID = concat_padded(self.output_file_grp, n)
             self.add_output_file(
                 ID=ID,
                 file_grp=self.output_file_grp,
@@ -267,7 +268,7 @@ class OcropySegment(Processor):
             #  #  print(res)
             #  for lineno, box in enumerate(res['boxes']):
             #      textline = TextLineType(
-            #          id=mets_file_id("line", lineno),
+            #          id=concat_padded("line", lineno),
             #          Coords=CoordsType(points=points_from_x0y0x1y1(box))
             #      )
             #      dummyRegion.add_TextLine(textline)
