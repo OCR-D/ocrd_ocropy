@@ -22,7 +22,7 @@ setup(
     license='Apache License 2.0',
     packages=find_packages(exclude=('tests', 'docs')),
     install_requires=[
-        'ocrd >= 0.3.1',
+        'ocrd >= 0.4.0',
         'ocrd-fork-ocropy >= v1.3.3.post2',
         'click',
     ],
