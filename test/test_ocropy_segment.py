@@ -20,13 +20,14 @@ class TestOcropySegment(TestCase):
         os.makedirs(WORKSPACE_DIR)
 
     def test_run1(self):
-        resolver = Resolver(cache_enabled=True)
-        workspace = resolver.workspace_from_url(assets.url_of('kant_aufklaerung_1784-binarized/mets.xml'), directory=WORKSPACE_DIR)
+        resolver = Resolver()
+        src_dir = assets.path_to('kant_aufklaerung_1784-binarized/data')
+        workspace = resolver.workspace_from_url(None, src_dir=src_dir, dst_dir=src_dir)
         proc = OcropySegment(
             workspace,
             input_file_grp="OCR-D-IMG-BIN",
             output_file_grp="OCR-D-SEG-OCROPY",
-            group_id='P_0017',
+            page_id='P_0017',
         )
         #  print(proc.parameter)
         proc.process()

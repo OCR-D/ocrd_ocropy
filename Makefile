@@ -61,6 +61,9 @@ repo/assets:
 	mkdir -p $(dir $@)
 	git clone https://github.com/OCR-D/assets "$@"
 
+# Remove assets
+assets-clean:
+	rm -rf test/assets
 
 # Setup test assets
 assets: repo/assets

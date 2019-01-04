@@ -6,7 +6,7 @@ Installs one binary:
 """
 import codecs
 
-from setuptools import setup, find_packages
+from setuptools import setup
 
 with codecs.open('README.rst', encoding='utf-8') as f:
     README = f.read()
@@ -20,12 +20,8 @@ setup(
     author_email='unixprog@gmail.com, wuerzner@gmail.com',
     url='https://github.com/OCR-D/ocrd_ocropy',
     license='Apache License 2.0',
-    packages=find_packages(exclude=('tests', 'docs')),
-    install_requires=[
-        'ocrd >= 0.4.0',
-        'ocrd-fork-ocropy >= v1.3.3.post2',
-        'click',
-    ],
+    packages=['ocrd_ocropy'],
+    install_requires=open('requirements.txt').read().split('\n'),
     package_data={
         '': ['*.json', '*.yml', '*.yaml'],
     },
