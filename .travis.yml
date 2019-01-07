@@ -6,6 +6,6 @@ python:
   - 3.6
   - '3.7-dev'
 install:
-  - make deps-pip deps-pip-test
+  - make deps-pip deps-pip-test assets
 script:
-  - make assets-clean assets test OCRD_BASEURL="https://github.com/OCR-D/ocrd-assets/raw/master/data/"
+  - make test
