@@ -1,3 +1,1 @@
-ocrd >= 0.15.1
-ocrd-fork-ocropy >= 1.4.0a2
-click
+.

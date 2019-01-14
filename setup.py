@@ -21,7 +21,11 @@ setup(
     url='https://github.com/OCR-D/ocrd_ocropy',
     license='Apache License 2.0',
     packages=['ocrd_ocropy'],
-    install_requires=open('requirements.txt').read().split('\n'),
+    install_requires=[
+        'ocrd >= 0.15.1',
+        'ocrd-fork-ocropy >= 1.4.0a3',
+        'click'
+    ],
     package_data={
         '': ['*.json', '*.yml', '*.yaml'],
     },
