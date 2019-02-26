@@ -2,6 +2,7 @@
 
 import os
 import shutil
+from tempfile import TemporaryDirectory
 
 from test.base import TestCase, assets, main
 
@@ -21,17 +22,17 @@ class TestOcropySegment(TestCase):
 
     def test_run1(self):
         resolver = Resolver()
-        src_dir = assets.path_to('kant_aufklaerung_1784-binarized/data')
-        workspace = resolver.workspace_from_url(None, src_dir=src_dir, dst_dir=src_dir)
-        proc = OcropySegment(
-            workspace,
-            input_file_grp="OCR-D-IMG-BIN",
-            output_file_grp="OCR-D-SEG-OCROPY",
-            page_id='P_0017',
-        )
-        #  print(proc.parameter)
-        proc.process()
-        workspace.save_mets()
+        with TemporaryDirectory() as tempdir:
+            workspace = resolver.workspace_from_url(assets.path_to('kant_aufklaerung_1784-binarized/data/mets.xml'), dst_dir=tempdir)
+            proc = OcropySegment(
+                workspace,
+                input_file_grp="OCR-D-IMG-BIN",
+                output_file_grp="OCR-D-SEG-OCROPY-TEST",
+                page_id='P_0017',
+            )
+            #  print(proc.parameter)
+            proc.process()
+            workspace.save_mets()
 
 if __name__ == "__main__":
     main()

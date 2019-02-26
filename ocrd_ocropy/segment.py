@@ -7,16 +7,16 @@ from __future__ import absolute_import
 # pylint: disable=multiple-statements
 
 from ocrd import Processor
-from ocrd.constants import MIMETYPE_PAGE
-from ocrd.utils import (
+from ocrd_utils import (
     getLogger,
     concat_padded,
     polygon_from_points,
-    points_from_x0y0x1y1
+    points_from_x0y0x1y1,
+    MIMETYPE_PAGE
 )
 
-import ocrd.model.ocrd_page as ocrd_page
-from ocrd.model.ocrd_page import TextRegionType, TextLineType, CoordsType, to_xml
+from ocrd_models.ocrd_page import TextRegionType, TextLineType, CoordsType, to_xml
+from ocrd_modelfactory import page_from_file
 from ocrd_ocropy.config import OCRD_TOOL
 
 import logging
@@ -155,6 +155,7 @@ class OcropySegment(Processor):
         colseps = self.compute_colseps_conv(binary, scale)
         if self.parameter['maxseps'] > 0:
             log.debug("considering at most %g black column separators" % self.parameter['maxseps'])
+            # TODO BUG compute_separators_morph not ported! 
             seps = self.compute_separators_morph(binary, scale)
             #colseps = self.compute_colseps_morph(binary, scale)
             colseps = np.maximum(colseps, seps)
@@ -217,7 +218,7 @@ class OcropySegment(Processor):
             log.info("INPUT FILE %i / %s", n, input_file)
             downloaded_file = self.workspace.download_file(input_file)
             log.info("downloaded_file %s", downloaded_file)
-            pcgts = ocrd_page.from_file(downloaded_file)
+            pcgts = page_from_file(downloaded_file)
             # TODO binarized variant from get_AlternativeImage()
             image_url = pcgts.get_Page().imageFilename
             log.info("pcgts %s", pcgts)
@@ -254,8 +255,8 @@ class OcropySegment(Processor):
             self.workspace.add_file(
                 ID=ID,
                 file_grp=self.output_file_grp,
-                basename="%s.xml" % ID,
                 mimetype=MIMETYPE_PAGE,
+                local_filename="%s/%s" % (self.output_file_grp, ID),
                 content=to_xml(pcgts)
             )
 
