@@ -5,6 +5,6 @@ python:
   - 3.6
   - '3.7-dev'
 install:
-  - make deps-pip deps-pip-test assets
+  - make deps-pip deps-pip-test assets > /dev/null
 script:
   - make test
