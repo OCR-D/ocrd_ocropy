@@ -5,6 +5,7 @@ ignored-modules=cv2,tesserocr
 [MESSAGES CONTROL]
 disable =
     missing-docstring,
+    logging-not-lazy,
     no-self-use,
     too-many-arguments,
     superfluous-parens,
