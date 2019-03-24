@@ -219,6 +219,8 @@ class OcropySegment(Processor):
             downloaded_file = self.workspace.download_file(input_file)
             log.info("downloaded_file %s", downloaded_file)
             pcgts = page_from_file(downloaded_file)
+            page_width = pcgts.get_Page().get_imageWidth()
+            page_height = pcgts.get_Page().get_imageHeight()
             # TODO binarized variant from get_AlternativeImage()
             image_url = pcgts.get_Page().imageFilename
             log.info("pcgts %s", pcgts)
@@ -241,7 +243,8 @@ class OcropySegment(Processor):
             regions = ocrolib.RegionExtractor()
             regions.setPageLines(pseg)
 
-            dummyRegion = TextRegionType()
+            dummyRegion = TextRegionType(id="dummy", Coords=CoordsType(points="0,0 %s,0 %s,%s 0,%s" % (
+                page_width, page_width, page_height, page_height)))
             pcgts.get_Page().add_TextRegion(dummyRegion)
 
             for lineno in range(1, regions.length()):
