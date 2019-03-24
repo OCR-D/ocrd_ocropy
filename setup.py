@@ -10,7 +10,7 @@ from setuptools import setup
 
 setup(
     name='ocrd_ocropy',
-    version='0.0.1',
+    version='0.0.2',
     description='ocropy bindings',
     long_description=codecs.open('README.md', encoding='utf-8').read(),
     long_description_content_type='text/markdown',
