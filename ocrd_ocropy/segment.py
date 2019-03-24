@@ -11,7 +11,7 @@ from ocrd_utils import (
     getLogger,
     concat_padded,
     polygon_from_points,
-    points_from_x0y0x1y1,
+    points_from_y0x0y1x1,
     MIMETYPE_PAGE
 )
 
@@ -251,7 +251,7 @@ class OcropySegment(Processor):
                 log.debug("id=%s bbox=%s", regions.id(lineno), regions.bbox(lineno))
                 textline = TextLineType(
                     id=concat_padded("line", lineno),
-                    Coords=CoordsType(points=points_from_x0y0x1y1(regions.bbox(lineno)))
+                    Coords=CoordsType(points=points_from_y0x0y1x1(regions.bbox(lineno)))
                 )
                 dummyRegion.add_TextLine(textline)
             ID = concat_padded(self.output_file_grp, n)
@@ -273,6 +273,6 @@ class OcropySegment(Processor):
             #  for lineno, box in enumerate(res['boxes']):
             #      textline = TextLineType(
             #          id=concat_padded("line", lineno),
-            #          Coords=CoordsType(points=points_from_x0y0x1y1(box))
+            #          Coords=CoordsType(points=points_from_y0x0y1x1(box))
             #      )
             #      dummyRegion.add_TextLine(textline)
