@@ -259,7 +259,7 @@ class OcropySegment(Processor):
                 ID=ID,
                 file_grp=self.output_file_grp,
                 mimetype=MIMETYPE_PAGE,
-                local_filename="%s/%s" % (self.output_file_grp, ID),
+                local_filename="%s/%s.xml" % (self.output_file_grp, ID),
                 content=to_xml(pcgts)
             )
 
