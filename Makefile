@@ -69,3 +69,6 @@ assets-clean:
 assets: repo/assets
 	mkdir -p test/assets
 	cp -r -t test/assets repo/assets/data/*
+
+pypi:
+	$(PYTHON) setup.py sdist bdist_wheel

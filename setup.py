@@ -10,7 +10,7 @@ from setuptools import setup
 
 setup(
     name='ocrd_ocropy',
-    version='0.0.1',
+    version='0.0.1a1',
     description='ocropy bindings',
     long_description=codecs.open('README.md', encoding='utf-8').read(),
     long_description_content_type='text/markdown',
@@ -20,7 +20,7 @@ setup(
     license='Apache License 2.0',
     packages=['ocrd_ocropy'],
     install_requires=[
-        'ocrd >= 1.0.0a4',
+        'ocrd >= 1.0.0b6',
         'ocrd-fork-ocropy >= 1.4.0a3',
         'click'
     ],
